@@ -37,19 +37,26 @@ export default function SignUp() {
   }, []);
 
   const validatePhone = (number: string): boolean => {
-    const albanianRegex = /^(?:\+355|0)?(67[0-9]{7}|(?:[2-9][0-9]{6,7}))$/;
+    const albanianRegex = /^(?:\+355|0)?(67[0-9]{7}|06[0-9]{7}|(?:[2-9][0-9]{6,7}))$/;
     const europeanRegex = /^\+?(?:[3-9][0-9]{8,12}|4[0-9]{9,12}|5[0-9]{9,12}|6[0-9]{9,12}|7[0-9]{9,12}|8[0-9]{9,12}|9[0-9]{9,12})$/;
   
-    if (number.startsWith('355') || number.startsWith('06')) {
-      return albanianRegex.test(number);
+    // Strip out any leading spaces and ensure the number is in string format
+    const cleanedNumber = number.trim();
+  
+    let isValid;
+    if (cleanedNumber.startsWith('355') || cleanedNumber.startsWith('06')) {
+      isValid = albanianRegex.test(cleanedNumber);
     } else {
-      return europeanRegex.test(number);
+      isValid = europeanRegex.test(cleanedNumber);
     }
+  
+    console.log("Is phone valid:", isValid); // Log the result
+    return isValid;
   };
   
-  const handleClick = (e: React.FormEvent) => {
+  const handleClick = async (e: React.FormEvent) => {
     e.preventDefault(); 
-
+    console.log("Phone number:", phone);
     if (!validatePhone(phone)) {
       setPhoneError('Please enter a valid phone number.');
       return;
@@ -60,31 +67,41 @@ export default function SignUp() {
     const candidate = { name, surname, gender, phone };
     console.log(candidate);
 
-    fetch(`${process.env.API_URL}/candidate/getCountByGender?gender=${gender}`)
-      .then(res => res.json())
-      .then(count => {
-        if (count < 8) {
-          fetch(`${process.env.API_URL}/candidate/add`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(candidate)
-          })
-            .then(() => {
-              console.log("New Candidate added");
-              setSubmitted(true); // Set submitted to true
-              // Optionally, redirect to a different route
-              // router.push('/thank-you'); // Uncomment if you have a separate page
-            })
-            .catch(error => {
-              console.error("Error adding candidate:", error);
-            });
-        } else {
-          setIsSoldOut(true);
+    try {
+      // Get the gender count first
+      const genderCountResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/getCountByGender?gender=${gender}`);
+      console.log(genderCountResponse)
+      
+      if (!genderCountResponse.ok) {
+        throw new Error("Error fetching gender count");
+      }
+  
+      const count = await genderCountResponse.json();
+      
+      if (count < 150) {
+        // If the count is valid, try adding the candidate
+        const addCandidateResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/add`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(candidate)
+        });
+  
+        if (!addCandidateResponse.ok) {
+          throw new Error("Error adding candidate");
         }
-      })
-      .catch(error => {
-        console.error("Error getting count by gender:", error);
-      });
+
+        // Candidate added successfully
+        console.log("New Candidate added");
+        setSubmitted(true); // Mark as submitted
+        
+        // Optional: Redirect if needed
+        // router.push('/thank-you');
+      } else {
+        setIsSoldOut(true); // Show "sold out" message if limit is reached
+      }
+    } catch (error) {
+      console.error("Error in submission process:", error);
+    }
   };
 
   return (
@@ -184,16 +201,9 @@ export default function SignUp() {
                       placeholder="Enter your phone number"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      onBlur={(e) => {
-                      const isValidPhone = validatePhone(phone);
-                      if (!isValidPhone) {
-                      setPhoneError('Please enter a valid phone number.');
-                      } else {
-                      setPhoneError('');
-                      }
-                      }}
                       required
                     />
+                      {phoneError && <p className="text-red-500">{phoneError}</p>} {/* Show error message */}
                   </div>
                 </div>
                 <div className="mt-6 space-y-5">
