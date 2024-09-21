@@ -37,21 +37,17 @@ export default function SignUp() {
   }, []);
 
   const validatePhone = (number: string): boolean => {
-    const albanianRegex = /^(?:\+355|0)?(67[0-9]{7}|06[0-9]{7}|(?:[2-9][0-9]{6,7}))$/;
+    const albanianRegex = /^(?:\+355|0)?(69[0-9]{7}|68[0-9]{7}|67[0-9]{7})$/;
     const europeanRegex = /^\+?(?:[3-9][0-9]{8,12}|4[0-9]{9,12}|5[0-9]{9,12}|6[0-9]{9,12}|7[0-9]{9,12}|8[0-9]{9,12}|9[0-9]{9,12})$/;
   
-    // Strip out any leading spaces and ensure the number is in string format
     const cleanedNumber = number.trim();
   
-    let isValid;
-    if (cleanedNumber.startsWith('355') || cleanedNumber.startsWith('06')) {
-      isValid = albanianRegex.test(cleanedNumber);
-    } else {
-      isValid = europeanRegex.test(cleanedNumber);
+    if (cleanedNumber.startsWith('+355') || cleanedNumber.startsWith('06')) {
+      return albanianRegex.test(cleanedNumber);
     }
-  
-    console.log("Is phone valid:", isValid); // Log the result
-    return isValid;
+
+    console.log("Is phone valid:", albanianRegex.test(cleanedNumber)); 
+    return europeanRegex.test(cleanedNumber);
   };
   
   const handleClick = async (e: React.FormEvent) => {
@@ -112,10 +108,11 @@ export default function SignUp() {
             autoPlay
             loop
             muted
+            playsInline
             className="w-full h-full object-cover"
             style={{ opacity: 0.2 }}
           >
-            <source src="/videos/728v1.mp4" type="video/mp4" />
+            <source src="/videos/728v2.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
@@ -124,7 +121,7 @@ export default function SignUp() {
         <div className="py-12 md:py-20">
           {submitted ? (
             <div className="text-center">
-              <img src="/images/Invitation.jpg" alt="Thank You" className="mx-auto" /> {/* Static image */}
+              <img src="/images/Invitation.jpg" alt="Thank You" className="mx-auto" />
             </div>
           ) : (
             <>
@@ -140,6 +137,7 @@ export default function SignUp() {
                     <input
                       id="name"
                       type="text"
+                      autoComplete="off"
                       className="form-input w-full"
                       placeholder="Your first name"
                       value={name}
@@ -154,6 +152,7 @@ export default function SignUp() {
                     <input
                       id="surname"
                       type="text"
+                      autoComplete="off"
                       className="form-input w-full"
                       placeholder="Your last name"
                       value={surname}
@@ -197,6 +196,7 @@ export default function SignUp() {
                     <input
                       id="phone"
                       type="text"
+                      autoComplete="off"
                       className="form-input w-full"
                       placeholder="Enter your phone number"
                       value={phone}
@@ -222,7 +222,10 @@ export default function SignUp() {
       
       <footer className="mt-8 text-center text-gray-500 text-sm">
       <p>Powered by</p>
-        <img src="/images/MoonON-Ready.png" className="mx-auto" width={60} height={60}/> {/* Static image */}
+      <div className="flex justify-center items-center space-x-4 mt-2">
+        <img src="/images/MoonON-Ready.png" className="inline-block" width={60} height={60} alt="Logo 1" /> 
+        <img src="/images/GP.png" className="inline-block" width={25} height={10} alt="Logo 2" /> 
+      </div>
       </footer>
     </section>
   );
