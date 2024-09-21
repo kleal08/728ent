@@ -49,10 +49,10 @@ export default function SignUp() {
     console.log("Is phone valid:", albanianRegex.test(cleanedNumber)); 
     return europeanRegex.test(cleanedNumber);
   };
-  
-  const handleClick = async (e: React.FormEvent) => {
+
+  const handleClick = (e: React.FormEvent) => {
     e.preventDefault(); 
-    console.log("Phone number:", phone);
+
     if (!validatePhone(phone)) {
       setPhoneError('Please enter a valid phone number.');
       return;
@@ -63,42 +63,33 @@ export default function SignUp() {
     const candidate = { name, surname, gender, phone };
     console.log(candidate);
 
-    try {
-      // Get the gender count first
-      const genderCountResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/getCountByGender?gender=${gender}`);
-      console.log(genderCountResponse)
-      
-      if (!genderCountResponse.ok) {
-        throw new Error("Error fetching gender count");
-      }
-  
-      const count = await genderCountResponse.json();
-      
-      if (count < 150) {
-        // If the count is valid, try adding the candidate
-        const addCandidateResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/add`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(candidate)
-        });
-  
-        if (!addCandidateResponse.ok) {
-          throw new Error("Error adding candidate");
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/getCountByGender?gender=${gender}`)
+      .then(res => res.json())
+      .then(count => {
+        if (count < 150) {
+          fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/add`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(candidate)
+          })
+            .then(() => {
+              console.log("New Candidate added");
+              setSubmitted(true); // Set submitted to true
+              // Optionally, redirect to a different route
+              // router.push('/thank-you'); // Uncomment if you have a separate page
+            })
+            .catch(error => {
+              console.error("Error adding candidate:", error);
+            });
+        } else {
+          setIsSoldOut(true);
         }
-
-        // Candidate added successfully
-        console.log("New Candidate added");
-        setSubmitted(true); // Mark as submitted
-        
-        // Optional: Redirect if needed
-        // router.push('/thank-you');
-      } else {
-        setIsSoldOut(true); // Show "sold out" message if limit is reached
-      }
-    } catch (error) {
-      console.error("Error in submission process:", error);
-    }
+      })
+      .catch(error => {
+        console.error("Error in submission process:", error);
+      });
   };
+  
 
   return (
     <section>
