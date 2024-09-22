@@ -66,7 +66,7 @@ export default function SignUp() {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/getCountByGender?gender=${gender}`)
       .then(res => res.json())
       .then(count => {
-        if (count < 150) {
+        if (count <= 150) {
           fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/add`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -74,9 +74,7 @@ export default function SignUp() {
           })
             .then(() => {
               console.log("New Candidate added");
-              setSubmitted(true); // Set submitted to true
-              // Optionally, redirect to a different route
-              // router.push('/thank-you'); // Uncomment if you have a separate page
+              setSubmitted(true); 
             })
             .catch(error => {
               console.error("Error adding candidate:", error);
