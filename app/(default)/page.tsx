@@ -63,6 +63,9 @@ export default function SignUp() {
     const candidate = { name, surname, gender, phone };
     console.log(candidate);
 
+    setIsSoldOut(true);
+
+    /**
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/getCountByGender?gender=${gender}`)
       .then(res => res.json())
       .then(count => {
@@ -86,8 +89,9 @@ export default function SignUp() {
       .catch(error => {
         console.error("Error in submission process:", error);
       });
+      **/
+
   };
-  
 
   return (
     <section>
@@ -114,6 +118,12 @@ export default function SignUp() {
             </div>
           ) : (
             <>
+            {isSoldOut ? (
+              <div className="text-center">
+                <img src="/images/SoldOut.png" alt="Sold Out" className="mx-auto" style={{ width: '300px', height: 'auto' }} />
+              </div>
+            ) : (
+              <>
               <div className="pb-12 text-center">
               
               </div>
@@ -196,7 +206,9 @@ export default function SignUp() {
                   </div>
                 </div>
                 <div className="mt-6 space-y-5">
-                  <button type="submit" className="btn w-full bg-gradient-to-t from-indigo-600 to-indigo-500 bg-[length:100%_100%] bg-[bottom] text-white shadow-[inset_0px_1px_0px_0px_theme(colors.white/.16)] hover:bg-[length:100%_150%]">
+                  <button type="submit" 
+                  className="btn w-full bg-gradient-to-t from-indigo-600 to-indigo-500 bg-[length:100%_100%] bg-[bottom] text-white shadow-[inset_0px_1px_0px_0px_theme(colors.white/.16)] hover:bg-[length:100%_150%]"
+                  disabled={isSoldOut}>
                     Submit
                   </button>
                   {isSoldOut && (
@@ -204,6 +216,8 @@ export default function SignUp() {
                 )}
                 </div>
               </form>
+            </>
+            )}
             </>
           )}
         </div>
