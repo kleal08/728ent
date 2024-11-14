@@ -119,7 +119,7 @@ export default function SignUp() {
         <div className="py-12 md:py-20">
           {submitted ? (
             <div className="text-center">
-              <img src="/images/Invitation V2.jpg" alt="Thank You" className="mx-auto" loading="lazy"/>
+              <img src="/images/Selected.jpg" alt="Thank You" className="mx-auto" loading="lazy"/>
             </div>
           ) : (
             <>
