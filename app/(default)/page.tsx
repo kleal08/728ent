@@ -11,7 +11,7 @@ export default function SignUp() {
     margin: '20px auto',
     backgroundColor: '#fff',
   };
-  
+
   const router = useRouter(); // Initialize the router
 
   const [isMobile, setIsMobile] = useState(false);
@@ -20,7 +20,7 @@ export default function SignUp() {
   const [gender, setGender] = useState('');
   const [phone, setPhone] = useState('');
   const [isSoldOut, setIsSoldOut] = useState(false);
-  const [submitted, setSubmitted] = useState(false); 
+  const [submitted, setSubmitted] = useState(false);
   const [phoneError, setPhoneError] = useState('');
 
   useEffect(() => {
@@ -39,19 +39,19 @@ export default function SignUp() {
   const validatePhone = (number: string): boolean => {
     const albanianRegex = /^(?:\+355|0)?(69[0-9]{7}|68[0-9]{7}|67[0-9]{7})$/;
     const europeanRegex = /^\+?(?:[3-9][0-9]{8,12}|4[0-9]{9,12}|5[0-9]{9,12}|6[0-9]{9,12}|7[0-9]{9,12}|8[0-9]{9,12}|9[0-9]{9,12})$/;
-  
+
     const cleanedNumber = number.trim();
-  
+
     if (cleanedNumber.startsWith('+355') || cleanedNumber.startsWith('06')) {
       return albanianRegex.test(cleanedNumber);
     }
 
-    console.log("Is phone valid:", albanianRegex.test(cleanedNumber)); 
+    console.log("Is phone valid:", albanianRegex.test(cleanedNumber));
     return europeanRegex.test(cleanedNumber);
   };
 
   const handleClick = (e: React.FormEvent) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
     if (!validatePhone(phone)) {
       setPhoneError('Please enter a valid phone number.');
@@ -103,9 +103,9 @@ export default function SignUp() {
             muted
             playsInline
             className="w-full h-full object-cover"
-            style={{ opacity: 0.2 }}
+            style={{ opacity: 0.4 }}
           >
-            <source src="/videos/728v2.mp4" type="video/mp4" />
+            <source src="/videos/Background.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
@@ -114,121 +114,120 @@ export default function SignUp() {
         <div className="py-12 md:py-20">
           {submitted ? (
             <div className="text-center">
-              <img src="/images/Invitation.jpg" alt="Thank You" className="mx-auto" />
+              <img src="/images/Invitation V2.jpg" alt="Thank You" className="mx-auto" />
             </div>
           ) : (
             <>
-            {isSoldOut ? (
-              <div className="text-center">
-                <img src="/images/SoldOut.png" alt="Sold Out" className="mx-auto" style={{ width: '300px', height: 'auto' }} />
-              </div>
-            ) : (
-              <>
-              <div className="pb-12 text-center">
-              
-              </div>
-              <form className="mx-auto max-w-[400px]" onSubmit={handleClick}>
-                <div className="space-y-5">
-                  <div>
-                    <label className="mb-1 block text-sm font-medium text-indigo-200/65" htmlFor="name">
-                      Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      autoComplete="off"
-                      className="form-input w-full"
-                      placeholder="Your first name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                    />
+              {isSoldOut ? (
+                <div className="text-center">
+                  <img src="/images/SoldOut.png" alt="Sold Out" className="mx-auto" style={{ width: '300px', height: 'auto' }} />
+                </div>
+              ) : (
+                <>
+                  <div className="pb-12 text-center">
+
                   </div>
-                  <div>
-                    <label className="mb-1 block text-sm font-medium text-indigo-200/65" htmlFor="surname">
-                      Surname <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="surname"
-                      type="text"
-                      autoComplete="off"
-                      className="form-input w-full"
-                      placeholder="Your last name"
-                      value={surname}
-                      onChange={(e) => setSurname(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-1 block text-sm font-medium text-indigo-200/65" htmlFor="gender">
-                      Gender <span className="text-red-500">*</span>
-                    </label>
-                    <div className="flex space-x-6">
-                      <label className="flex items-center">
+                  <form className="mx-auto max-w-[400px]" onSubmit={handleClick}>
+                    <div className="space-y-5">
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-indigo-200/65" htmlFor="name">
+                          Name <span className="text-red-500">*</span>
+                        </label>
                         <input
-                          type="radio"
-                          value="male"
-                          checked={gender === 'male'}
-                          onChange={(e) => setGender(e.target.value)}
+                          id="name"
+                          type="text"
+                          autoComplete="off"
+                          className="form-input w-full border-2 border-purple-500 bg-white/80 placeholder:text-gray-400 text-gray-900 focus:ring-0 focus:border-purple-700 outline-none shadow-[0_0_10px_rgba(128,0,255,0.6)] transition-shadow focus:shadow-[0_0_15px_rgba(128,0,255,0.8)]"
+                          placeholder="Your first name"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
                           required
-                          className="form-radio"
                         />
-                        <span className="ml-2">Male</span>
-                      </label>
-                      <label className="flex items-center">
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-indigo-200/65" htmlFor="surname">
+                          Surname <span className="text-red-500">*</span>
+                        </label>
                         <input
-                          type="radio"
-                          value="female"
-                          checked={gender === 'female'}
-                          onChange={(e) => setGender(e.target.value)}
+                          id="surname"
+                          type="text"
+                          autoComplete="off"
+                          className="form-input w-full border-2 border-purple-500 bg-white/80 placeholder:text-gray-400 text-gray-900 focus:ring-0 focus:border-purple-700 outline-none shadow-[0_0_10px_rgba(128,0,255,0.6)] transition-shadow focus:shadow-[0_0_15px_rgba(128,0,255,0.8)]"
+                          placeholder="Your last name"
+                          value={surname}
+                          onChange={(e) => setSurname(e.target.value)}
                           required
-                          className="form-radio"
                         />
-                        <span className="ml-2">Female</span>
-                      </label>
+                      </div>
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-indigo-200/65" htmlFor="gender">
+                          Gender <span className="text-red-500">*</span>
+                        </label>
+                        <div className="flex space-x-6">
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              value="male"
+                              checked={gender === 'male'}
+                              onChange={(e) => setGender(e.target.value)}
+                              required
+                              className="form-radio"
+                            />
+                            <span className="ml-2">Male</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              value="female"
+                              checked={gender === 'female'}
+                              onChange={(e) => setGender(e.target.value)}
+                              required
+                              className="form-radio"
+                            />
+                            <span className="ml-2">Female</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-indigo-200/65" htmlFor="phone">
+                          Phone Number <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          id="phone"
+                          type="text"
+                          autoComplete="off"
+                          className="form-input w-full border-2 border-purple-500 bg-white/80 placeholder:text-gray-400 text-gray-900 focus:ring-0 focus:border-purple-700 outline-none shadow-[0_0_10px_rgba(128,0,255,0.6)] transition-shadow focus:shadow-[0_0_15px_rgba(128,0,255,0.8)]"
+                          placeholder="Enter your phone number"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                          required
+                        />
+                        {phoneError && <p className="text-red-500">{phoneError}</p>} {/* Show error message */}
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-indigo-200/65" htmlFor="phone">
-                      Phone Number <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="phone"
-                      type="text"
-                      autoComplete="off"
-                      className="form-input w-full"
-                      placeholder="Enter your phone number"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      required
-                    />
-                      {phoneError && <p className="text-red-500">{phoneError}</p>} {/* Show error message */}
-                  </div>
-                </div>
-                <div className="mt-6 space-y-5">
-                  <button type="submit" 
-                  className="btn w-full bg-gradient-to-t from-indigo-600 to-indigo-500 bg-[length:100%_100%] bg-[bottom] text-white shadow-[inset_0px_1px_0px_0px_theme(colors.white/.16)] hover:bg-[length:100%_150%]"
-                  disabled={isSoldOut}>
-                    Submit
-                  </button>
-                  {isSoldOut && (
-                  <p className="text-red-500 text-center mt-4">Sorry, the show is sold out!</p>
-                )}
-                </div>
-              </form>
-            </>
-            )}
+                    <div className="mt-6 space-y-5">
+                      <button type="submit"
+                      className="btn w-full bg-gradient-to-t from-purple-600 to-indigo-500 text-white shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.16)] hover:bg-gradient-to-b hover:from-indigo-600 hover:to-purple-600 transition-all duration-300 ease-in-out transform hover:scale-105"                        disabled={isSoldOut}>
+                        Submit
+                      </button>
+                      {isSoldOut && (
+                        <p className="text-red-500 text-center mt-4">Sorry, the show is sold out!</p>
+                      )}
+                    </div>
+                  </form>
+                </>
+              )}
             </>
           )}
         </div>
       </div>
-      
+
       <footer className="mt-8 text-center text-gray-500 text-sm">
-      <p>Powered by</p>
-      <div className="flex justify-center items-center space-x-4 mt-2">
-        <img src="/images/MoonON-Ready.png" className="inline-block" width={60} height={60} alt="Logo 1" /> 
-        <img src="/images/GP.png" className="inline-block" width={25} height={10} alt="Logo 2" /> 
-      </div>
+        <p>Powered by</p>
+        <div className="flex justify-center items-center space-x-4 mt-2">
+          <img src="/images/MoonON-Ready.png" className="inline-block" width={60} height={60} alt="Logo 1" />
+          <img src="/images/GP.png" className="inline-block" width={25} height={10} alt="Logo 2" />
+        </div>
       </footer>
     </section>
   );
