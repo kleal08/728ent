@@ -50,7 +50,7 @@ export default function SignUp() {
     return europeanRegex.test(cleanedNumber);
   };
 
-  const handleClick = (e: React.FormEvent) => {
+  const handleClick = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validatePhone(phone)) {
@@ -65,30 +65,37 @@ export default function SignUp() {
 
     //setIsSoldOut(true);
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/getCountByGender?gender=${gender}`)
-      .then(res => res.json())
-      .then(count => {
-        if (count <= 150) {
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/add`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(candidate)
-          })
-            .then(() => {
-              console.log("New Candidate added");
-              setSubmitted(true); 
-            })
-            .catch(error => {
-              console.error("Error adding candidate:", error);
-            });
-        } else {
-          setIsSoldOut(true);
-        }
-      })
-      .catch(error => {
-        console.error("Error in submission process:", error);
+
+  try {
+    const countRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/getCountByGender?gender=${gender}`);
+    if (!countRes.ok) {
+      throw new Error('Failed to fetch count');
+    }
+
+    const count = await countRes.json();
+    console.log('Current count:', count);
+
+    if (count <= 150) {
+      const submitRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/add`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(candidate),
       });
-  };
+
+      if (!submitRes.ok) {
+        throw new Error('Failed to submit candidate');
+      }
+
+      console.log("New Candidate added");
+      setSubmitted(true); 
+    } else {
+      setIsSoldOut(true);
+    }
+  } catch (error) {
+    console.error("Error in submission process:", error);
+    // Optionally, set an error state to show the user
+  }
+};
 
   return (
     <section>
@@ -99,7 +106,7 @@ export default function SignUp() {
             loop
             muted
             playsInline
-            preload="auto"
+            preload="metadata"
             className="w-full h-full object-cover"
             style={{ opacity: 0.4 }}
           >
@@ -112,7 +119,7 @@ export default function SignUp() {
         <div className="py-12 md:py-20">
           {submitted ? (
             <div className="text-center">
-              <img src="/images/Invitation V2.jpg" alt="Thank You" className="mx-auto" />
+              <img src="/images/Invitation V2.jpg" alt="Thank You" className="mx-auto" loading="lazy"/>
             </div>
           ) : (
             <>
