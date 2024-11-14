@@ -63,9 +63,8 @@ export default function SignUp() {
     const candidate = { name, surname, gender, phone };
     console.log(candidate);
 
-    setIsSoldOut(true);
+    //setIsSoldOut(true);
 
-    /**
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/getCountByGender?gender=${gender}`)
       .then(res => res.json())
       .then(count => {
@@ -89,8 +88,6 @@ export default function SignUp() {
       .catch(error => {
         console.error("Error in submission process:", error);
       });
-      **/
-
   };
 
   return (
@@ -102,10 +99,11 @@ export default function SignUp() {
             loop
             muted
             playsInline
+            preload="auto"
             className="w-full h-full object-cover"
             style={{ opacity: 0.4 }}
           >
-            <source src="/videos/Background.mp4" type="video/mp4" />
+            <source src="/videos/728-bg.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
@@ -210,9 +208,9 @@ export default function SignUp() {
                       className="btn w-full bg-gradient-to-t from-purple-600 to-indigo-500 text-white shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.16)] hover:bg-gradient-to-b hover:from-indigo-600 hover:to-purple-600 transition-all duration-300 ease-in-out transform hover:scale-105"                        disabled={isSoldOut}>
                         Submit
                       </button>
-                      {isSoldOut && (
+                      {/* {isSoldOut && (
                         <p className="text-red-500 text-center mt-4">Sorry, the show is sold out!</p>
-                      )}
+                      )} */}
                     </div>
                   </form>
                 </>
