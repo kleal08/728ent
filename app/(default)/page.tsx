@@ -223,7 +223,7 @@ export default function SignUp() {
                           href="https://www.instagram.com/728.ent?igsh=MXh4bTdzdWl5MjRhNA%3D%3D&utm_source=qr"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-transparent bg-clip-text bg-gradient-to-t from-gray-200 to-white hover:bg-gradient-to-b hover:from-white hover:to-gray-300 transition-all duration-300 ease-in-out"
+                          className="text-transparent bg-clip-text bg-gradient-to-t from-purple-600 to-indigo-500 hover:bg-gradient-to-b hover:from-indigo-600 hover:to-purple-600 transition-all duration-300 ease-in-out"
                           >
                         Got a question? Reach us out!
                         </a>
