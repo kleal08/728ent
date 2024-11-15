@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter
 import Link from "next/link";
+import classNames from "classnames";
 
 export default function SignUp() {
   const paperStyle = {
@@ -21,10 +22,17 @@ export default function SignUp() {
   const [phone, setPhone] = useState('');
   const [isSoldOut, setIsSoldOut] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [phoneError, setPhoneError] = useState('');
+  const [phoneError, setPhoneError] = useState(false);
   const [videoLoaded, setVideoLoaded] = React.useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const isFormIncomplete = () => {
+    return !name || !surname || !gender || !phone;
+  };
+  
 
   useEffect(() => {
     const handleResize = () => {
@@ -48,6 +56,14 @@ export default function SignUp() {
     }
   }, [videoLoaded]);
 
+  const buttonClasses = classNames(
+    'btn w-full shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.16)] transition-all duration-300 ease-in-out transform hover:scale-105',
+    {
+      'bg-gradient-to-t from-purple-600 to-indigo-500 text-white cursor-not-allowed opacity-50': loading || phoneError || errorMessage || isFormIncomplete(),
+      'bg-gradient-to-t from-blue-600 to-purple-600 text-white hover:bg-gradient-to-b hover:from-purple-600 hover:to-blue-600': !loading && !phoneError && !errorMessage && !isFormIncomplete(),
+    }
+  );
+
   const validatePhone = (number: string): boolean => {
     const albanianRegex = /^(?:\+355|0)?(69[0-9]{7}|68[0-9]{7}|67[0-9]{7})$/;
     const europeanRegex = /^\+?(?:[3-9][0-9]{8,12}|4[0-9]{9,12}|5[0-9]{9,12}|6[0-9]{9,12}|7[0-9]{9,12}|8[0-9]{9,12}|9[0-9]{9,12})$/;
@@ -55,27 +71,43 @@ export default function SignUp() {
     const cleanedNumber = number.trim();
 
     if (cleanedNumber.startsWith('+355') || cleanedNumber.startsWith('06')) {
-      return albanianRegex.test(cleanedNumber);
+      const valid = albanianRegex.test(cleanedNumber);
+      setPhoneError(!valid); 
+      return valid;
     }
 
     console.log("Is phone valid:", albanianRegex.test(cleanedNumber));
-    return europeanRegex.test(cleanedNumber);
+    const valid = europeanRegex.test(cleanedNumber);
+    setPhoneError(!valid); 
+    return valid;
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const phoneValue = e.target.value;
+    setPhone(phoneValue); // Update phone value
+    validatePhone(phoneValue); // Validate the phone number
   };
 
   const handleClick = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validatePhone(phone)) {
-      setPhoneError('Please enter a valid phone number.');
+    if (isFormIncomplete()) {
+      setErrorMessage('Please fill in all required fields.');
+      setName('');
+      setSurname('');
+      setGender('');
+      setPhone('');
+      setLoading(false);
       return;
-    } else {
-      setPhoneError('');
     }
 
-    const candidate = { name, surname, gender, phone };
-    console.log(candidate);
+    setLoading(true);
+
+    setErrorMessage('');
 
     //setIsSoldOut(true);
+    const candidate = { name, surname, gender, phone };
+    console.log(candidate);
 
 
   try {
@@ -99,6 +131,7 @@ export default function SignUp() {
       }
 
       console.log("New Candidate added");
+      setErrorMessage('');
       setSubmitted(true); 
     } else {
       setIsSoldOut(true);
@@ -106,7 +139,10 @@ export default function SignUp() {
   } catch (error) {
     console.error("Error in submission process:", error);
     // Optionally, set an error state to show the user
+  } finally {
+    setLoading(false);
   }
+
 };
 
   return (
@@ -187,7 +223,7 @@ export default function SignUp() {
                               checked={gender === 'male'}
                               onChange={(e) => setGender(e.target.value)}
                               required
-                              className="form-radio"
+                              className="form-radio bg-white/80"
                             />
                             <span className="ml-2">Male</span>
                           </label>
@@ -198,7 +234,7 @@ export default function SignUp() {
                               checked={gender === 'female'}
                               onChange={(e) => setGender(e.target.value)}
                               required
-                              className="form-radio"
+                              className="form-radio bg-white/80"
                             />
                             <span className="ml-2">Female</span>
                           </label>
@@ -215,17 +251,26 @@ export default function SignUp() {
                           className="form-input w-full border-2 border-purple-500 bg-white/80 placeholder:text-gray-400 text-gray-900 focus:ring-0 focus:border-purple-700 outline-none shadow-[0_0_10px_rgba(128,0,255,0.6)] transition-shadow focus:shadow-[0_0_15px_rgba(128,0,255,0.8)]"
                           placeholder="Your phone number"
                           value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
+                          onChange={handlePhoneChange}
                           required
                         />
-                        {phoneError && <p className="text-red-500">{phoneError}</p>} {/* Show error message */}
+                        {phoneError && <p className="text-red-500">Please enter a valid phone number.</p>} 
                       </div>
                     </div>
                     <div className="mt-6 space-y-5">
                       <button type="submit"
-                      className="btn w-full bg-gradient-to-t from-purple-600 to-indigo-500 text-white shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.16)] hover:bg-gradient-to-b hover:from-indigo-600 hover:to-purple-600 transition-all duration-300 ease-in-out transform hover:scale-105"                        disabled={isSoldOut}>
-                        Submit
+                      className={buttonClasses}
+                      // className="btn w-full bg-gradient-to-t from-purple-600 to-indigo-500 text-white shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.16)] hover:bg-gradient-to-b hover:from-indigo-600 hover:to-purple-600 transition-all duration-300 ease-in-out transform hover:scale-105"                        
+                      // disabled={isSoldOut}
+                      disabled={loading || phoneError || isFormIncomplete()} 
+                      >
+                        {loading ? 'Submitting...' : 'Submit'}
                       </button>
+                      {errorMessage && <p className="text-red-500 mt-4 text-center">{errorMessage}</p>}
+                      {isFormIncomplete() && !loading && !phoneError && !errorMessage && (
+                        <p className="text-yellow-500 text-center mt-4">Please fill in all required fields.</p>
+                      )}
+                      {/* {loading && <p className="text-center mt-4 text-indigo-500">Processing your submission, please wait...</p>} */}
                       {/* {isSoldOut && (
                         <p className="text-red-500 text-center mt-4">Sorry, the show is sold out!</p>
                       )} */}
