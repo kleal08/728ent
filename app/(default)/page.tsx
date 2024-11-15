@@ -202,7 +202,7 @@ export default function SignUp() {
                           type="text"
                           autoComplete="off"
                           className="form-input w-full border-2 border-purple-500 bg-white/80 placeholder:text-gray-400 text-gray-900 focus:ring-0 focus:border-purple-700 outline-none shadow-[0_0_10px_rgba(128,0,255,0.6)] transition-shadow focus:shadow-[0_0_15px_rgba(128,0,255,0.8)]"
-                          placeholder="Enter your phone number"
+                          placeholder="Your phone number"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
                           required
@@ -223,8 +223,8 @@ export default function SignUp() {
                           href="https://www.instagram.com/728.ent?igsh=MXh4bTdzdWl5MjRhNA%3D%3D&utm_source=qr"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-transparent bg-clip-text bg-gradient-to-t from-purple-600 to-indigo-500 hover:bg-gradient-to-b hover:from-indigo-600 hover:to-purple-600 transition-all duration-300 ease-in-out"
-                        >
+                          className="text-transparent bg-clip-text bg-gradient-to-t from-gray-200 to-white hover:bg-gradient-to-b hover:from-white hover:to-gray-300 transition-all duration-300 ease-in-out"
+                          >
                         Got a question? Reach us out!
                         </a>
                       </div>
