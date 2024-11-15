@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter
 import Link from "next/link";
 
@@ -24,6 +24,7 @@ export default function SignUp() {
   const [phoneError, setPhoneError] = useState('');
   const [videoLoaded, setVideoLoaded] = React.useState(false);
 
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -37,6 +38,15 @@ export default function SignUp() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      videoElement.play().catch(error => {
+        console.log("Video playback was prevented:", error);
+      });
+    }
+  }, [videoLoaded]);
 
   const validatePhone = (number: string): boolean => {
     const albanianRegex = /^(?:\+355|0)?(69[0-9]{7}|68[0-9]{7}|67[0-9]{7})$/;
@@ -101,31 +111,33 @@ export default function SignUp() {
 
   return (
     <section>
-       {isMobile && (
-      <div className="absolute top-0 left-0 w-full h-full z-[-1]">
-        {!videoLoaded && (
-          <img
-            src="/images/placeholder-img.png"
-            alt="Background placeholder"
-            className="absolute w-full h-full object-cover"
+      {isMobile && (
+        <div className="absolute top-0 left-0 w-full h-full z-[-1]">
+          {!videoLoaded && (
+            <img
+              src="/images/placeholder-img.png"
+              alt="Background placeholder"
+              className="absolute w-full h-full object-cover"
+              style={{ opacity: 0.4 }}
+            />
+          )}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            onCanPlayThrough={() => setVideoLoaded(true)}
+            className={`w-full h-full object-cover transition-opacity duration-500 ${
+              videoLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
             style={{ opacity: 0.4 }}
-          />
-        )}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          onCanPlayThrough={() => setVideoLoaded(true)}
-          className={`w-full h-full object-cover transition-opacity duration-500 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
-          style={{ opacity: 0.4 }}
-        >
-          <source src="/videos/728-compressed.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div>
-    )}
+          >
+            <source src="/videos/728-compressed.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      )}
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="py-12 md:py-20">
           {submitted ? (
