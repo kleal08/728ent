@@ -116,12 +116,12 @@ export default function SignUp() {
           loop
           muted
           playsInline
-          preload="metadata"
+          preload="auto"
           onCanPlayThrough={() => setVideoLoaded(true)}
           className={`w-full h-full object-cover transition-opacity duration-500 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
           style={{ opacity: 0.4 }}
         >
-          <source src="/videos/728-bg.mp4" type="video/mp4" />
+          <source src="/videos/728-compressed.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
