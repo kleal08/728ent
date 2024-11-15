@@ -111,32 +111,21 @@ export default function SignUp() {
 
   return (
     <section>
-      {isMobile && (
-        <div className="absolute top-0 left-0 w-full h-full z-[-1]">
-          {!videoLoaded && (
-            <img
-              src="/images/placeholder-img.png"
-              alt="Background placeholder"
-              className="absolute w-full h-full object-cover"
-              style={{ opacity: 0.4 }}
-            />
-          )}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            onCanPlayThrough={() => setVideoLoaded(true)}
-            className={`w-full h-full object-cover transition-opacity duration-500 ${
-              videoLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
-            style={{ opacity: 0.4 }}
-          >
-            <source src="/videos/728-compressed.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      )}
+    {isMobile && (
+      <div className="absolute top-0 left-0 w-full h-full z-[-1]">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+          style={{ opacity: 0.4 }}
+        >
+          <source src="/videos/728-compressed.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    )}
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="py-12 md:py-20">
           {submitted ? (
