@@ -126,7 +126,6 @@ export default function SignUp() {
             loop
             muted
             playsInline
-            preload="metadata"
             onCanPlayThrough={() => setVideoLoaded(true)}
             className={`w-full h-full object-cover transition-opacity duration-500 ${
               videoLoaded ? 'opacity-100' : 'opacity-0'
