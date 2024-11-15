@@ -258,19 +258,14 @@ export default function SignUp() {
                       </div>
                     </div>
                     <div className="mt-6 space-y-5">
-                    <button
-  type="submit"
-  className={classNames(
-    'btn w-full shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.16)] transition-all duration-300 ease-in-out transform hover:scale-105',
-    {
-      'bg-gradient-to-t from-purple-600 to-indigo-500 text-white cursor-not-allowed opacity-50': loading || phoneError || isFormIncomplete(),
-      'bg-gradient-to-t from-blue-600 to-purple-600 text-white hover:bg-gradient-to-b hover:from-purple-600 hover:to-blue-600': !loading && !phoneError && !isFormIncomplete(),
-    }
-  )}
-  disabled={loading || phoneError || isFormIncomplete()}
->
-  {loading ? 'Submitting...' : 'Submit'}
-</button>
+                      <button type="submit"
+                      className={buttonClasses}
+                      // className="btn w-full bg-gradient-to-t from-purple-600 to-indigo-500 text-white shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.16)] hover:bg-gradient-to-b hover:from-indigo-600 hover:to-purple-600 transition-all duration-300 ease-in-out transform hover:scale-105"                        
+                      // disabled={isSoldOut}
+                      disabled={loading || phoneError || isFormIncomplete()} 
+                      >
+                        {loading ? 'Submitting...' : 'Submit'}
+                      </button>
                       {errorMessage && <p className="text-red-500 mt-4 text-center">{errorMessage}</p>}
                       {isFormIncomplete() && !loading && !phoneError && !errorMessage && (
                         <p className="text-yellow-500 text-center mt-4">Please fill in all required fields.</p>
