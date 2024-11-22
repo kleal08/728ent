@@ -101,16 +101,18 @@ export default function SignUp() {
       return;
     }
 
-    setLoading(true);
-
-    setErrorMessage('');
-
-    //setIsSoldOut(true);
-    const candidate = { name, surname, gender, phone };
-    console.log(candidate);
+    //when the form should be closed set this to true
+    setIsSoldOut(true);
+    return; //to skip API call
 
 
   try {
+    setLoading(true);
+    setErrorMessage('');
+
+    const candidate = { name, surname, gender, phone };
+    console.log(candidate);
+
     const countRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/candidate/getCountByGender?gender=${gender}`);
     if (!countRes.ok) {
       throw new Error('Failed to fetch count');
@@ -154,6 +156,7 @@ export default function SignUp() {
           loop
           muted
           playsInline
+          preload="auto"
           className="w-full h-full object-cover"
           style={{ opacity: 0.4 }}
         >
