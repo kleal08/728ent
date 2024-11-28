@@ -26,6 +26,8 @@ export default function SignUp() {
   const [videoLoaded, setVideoLoaded] = React.useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [videoOnly, setVideoOnly] = useState(true); // Add state for "coming-soon" mode
+
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -158,13 +160,15 @@ export default function SignUp() {
           playsInline
           preload="auto"
           className="w-full h-full object-cover"
-          style={{ opacity: 0.4 }}
+          // style={{ opacity: 0.4 }}
         >
-          <source src="/videos/728-compressed.mp4" type="video/mp4" />
+          <source src="/videos/comingSoon.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
     )}
+    {!videoOnly && (
+
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="py-12 md:py-20">
           {submitted ? (
@@ -295,14 +299,16 @@ export default function SignUp() {
           )}
         </div>
       </div>
-
-      <footer className="mt-8 text-center text-gray-500 text-sm">
+      )}
+      
+      {/* <footer className="mt-8 text-center text-gray-500 text-sm">
         <p>Powered by</p>
         <div className="flex justify-center items-center space-x-4 mt-2">
           <img src="/images/MoonON-Ready.png" className="inline-block" width={60} height={60} alt="Logo 1" />
           <img src="/images/GP.png" className="inline-block" width={25} height={10} alt="Logo 2" />
         </div>
-      </footer>
+      </footer> */}
+  
     </section>
   );
 }
